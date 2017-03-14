@@ -1,0 +1,52 @@
+html, body {
+	height: 100%;
+}
+
+.page-container {
+	height: 100%;
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.question,
+.result {
+	display: inline-block;
+}
+
+.question-text,
+.result-text {
+	text-align: center;
+	padding: 0 0.5em;
+}
+
+.question-answers,
+.result-options {
+	display: flex;
+	flex-align: stretch;
+	justify-content: center;
+	margin-top: 1em;
+}
+
+.option {
+	max-width: 25vw;
+	color: black;
+	background-color: white;
+	padding: 1em;
+	margin: 0 0.5em;
+}
+
+.option-image {
+	max-width: 100%;
+}
+
+.option-text {
+	margin-top: 0.5em;
+	text-align: center;
+}
+
+.result-reset {
+	margin-top: 1em;
+	text-align: center;
+}
