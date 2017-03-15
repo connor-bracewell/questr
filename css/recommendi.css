@@ -1,0 +1,46 @@
+.recommendi-question-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.recommendi-question-text,
+.recommendi-result-text {
+    text-align: center;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.recommendi-answer-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.recommendi-answer,
+.recommendi-restart-button {
+    margin-top: 1em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    background-color: white;
+    padding: 0.5em;
+    border-radius: 0.5em;
+}
+
+.recommendi-recommendation {
+    margin-top: 1em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    text-align: center;
+}
+
+.recommendi-recommendation-image {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    max-width: 7em;
+}
+
+.recommendi-restart-button-container {
+    text-align: center;
+}

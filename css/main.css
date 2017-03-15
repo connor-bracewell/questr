@@ -2,12 +2,8 @@ html, body {
 	height: 100%;
 }
 
-.page-container {
-	height: 100%;
-	color: white;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+#page-container {
+    height: 100%;
 }
 
 .question,

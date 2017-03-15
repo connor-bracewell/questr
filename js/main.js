@@ -1,6 +1,11 @@
 $(document).ready(function() {
 
-	$("button").button();
+    var containerId = "page-container";
+
+    $.getJSON("data.json", function(data) {
+        var config = data;
+        recommendi(containerId, config);
+    });
 
 	function initPage(immediate) {
 		if (immediate) {
@@ -35,6 +40,5 @@ $(document).ready(function() {
 	function getRandomHexColor() {
 		return "#" + (0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
 	}
-
 });
 

@@ -1,0 +1,68 @@
+{
+    "questions": [
+        {
+            "text": "What... is your name?",
+            "answers": [
+                {
+                    "text": "Sir Lancelot of Camelot",
+                    "element": "elementid",
+                    "value": 1
+                },
+                {
+                    "text": "Robin of Camelot",
+                    "element": "elementid",
+                    "value": 2
+                },
+                {
+                    "text": "Sir Galahad",
+                    "element": "elementid",
+                    "value": 3
+                },
+                {
+                    "text": "King Arthur of the Britons!",
+                    "element": "elementid",
+                    "value": 4
+                }
+            ]
+        },
+        {
+            "text": "What... is your quest?",
+            "answers": [
+                {
+                    "text": "To seek the Holy Grail",
+                    "value": 1
+                },
+                {
+                    "text": "To seek the Grail",
+                    "value": 2
+                },
+                {
+                    "text": "I seek the Holy Grail!",
+                    "value": 3
+                },
+                {
+                    "text": "I seek the Grail!",
+                    "value": 4
+                }
+            ]
+        }
+    ],
+    "resultelement": {
+        "text": "Your recommendations are:"
+    },
+    "restartelement": {
+        "text": "Restart"
+    },
+    "results": [
+        {
+            "text": "Continue on your quest",
+            "image": "img/adventure.jpg",
+            "sequence": [1,4]
+        },
+        {
+            "text": "Go on your merry way",
+            "image": "img/adventure.jpg",
+            "sequence": [2,4]
+        }
+    ]   
+}
