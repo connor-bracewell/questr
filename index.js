@@ -1,3 +1,7 @@
+exports.questr(containerId, config) {
+    recommendi(containerId, config);
+}
+
 function recommendi(containerId, config) {
     backfillDefaults(config);
     render(containerId, config);
