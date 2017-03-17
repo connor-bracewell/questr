@@ -1,8 +1,4 @@
-exports.questr(containerId, config) {
-    recommendi(containerId, config);
-}
-
-function recommendi(containerId, config) {
+function questr(containerId, config) {
     backfillDefaults(config);
     render(containerId, config);
     restartQuestions(config, containerId);

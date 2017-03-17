@@ -4,7 +4,7 @@ $(document).ready(function() {
 
     $.getJSON("data.json", function(data) {
         var config = data;
-        recommendi(containerId, config);
+        questr(containerId, config);
     });
 
 	function initPage(immediate) {
