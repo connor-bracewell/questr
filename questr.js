@@ -71,7 +71,8 @@ function render(containerId, config) {
     var qContainerEl = $("#" + containerId);
     $.each(config.questions, function(index, question) {
         if (question.hasOwnProperty("element")) {
-            $("#" + question.element).addClass("questr-question");
+            var questionEl = $("#" + question.element);
+            questionEl.addClass("questr-question");
             questionEl.attr("data-questr-question-id", question.id);
             $.each(question.answers, function(index, answer) {
                 $("#" + answer.element).click(
@@ -117,6 +118,13 @@ function render(containerId, config) {
             $("#" + result.element).addClass("questr-recommendation");
             $("#" + result.element).attr("data-questr-recommendation-id", result.id);
         });
+        $("#" + config.restartelement.element).click(
+            {
+                config: config,
+                containerId: containerId
+            },
+            handleRestartQuestions
+        );
     } else {
         var resultEl = $(document.createElement("div"));
         resultEl.addClass("questr-result");
