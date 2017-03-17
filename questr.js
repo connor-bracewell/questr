@@ -1,7 +1,7 @@
 function questr(containerId, config) {
     backfillDefaults(config);
     render(containerId, config);
-    restartQuestions(config, containerId);
+    initializeQuestions(config, containerId);
 }
 
 function backfillDefaults(config) {
@@ -11,7 +11,7 @@ function backfillDefaults(config) {
     $.each(config.questions, function(index, question) {
         //add an id if necessary
         if (!(question.hasOwnProperty("id"))) {
-            question.id = "recommendi-question-" + questionIndex;
+            question.id = "questr-question-" + questionIndex;
             questionIndex++;
         }
         //set next question if necessary
@@ -19,7 +19,7 @@ function backfillDefaults(config) {
             if (index < config.questions.length-1) {
                 //add an id to the next question if necessary
                 if (!(config.questions[index+1].hasOwnProperty("id"))) {
-                    config.questions[index+1].id = "recommendi-question-" + questionIndex;
+                    config.questions[index+1].id = "questr-question-" + questionIndex;
                     questionIndex++;
                 }
                 //set the nextid to the next question
@@ -37,7 +37,7 @@ function backfillDefaults(config) {
         $.each(question.answers, function(index, answer) {
             //add an id if necessary
             if (!(answer.hasOwnProperty("id"))) {
-                answer.id = "recommendi-answer-" + answerIndex;
+                answer.id = "questr-answer-" + answerIndex;
                 answerIndex++;
             }
             //set next question if necessary
@@ -54,7 +54,7 @@ function backfillDefaults(config) {
     var resultIndex
     $.each(config.results, function(index, result) {
         if (!(result.hasOwnProperty("id"))) {
-            result.id = "recommendi-result-" + resultIndex;
+            result.id = "questr-result-" + resultIndex;
             resultIndex++;
         }
         if (result.hasOwnProperty("sequence")) {
@@ -71,8 +71,8 @@ function render(containerId, config) {
     var qContainerEl = $("#" + containerId);
     $.each(config.questions, function(index, question) {
         if (question.hasOwnProperty("element")) {
-            $("#" + question.element).addClass("recommendi-question");
-            questionEl.attr("data-recommendi-question-id", question.id);
+            $("#" + question.element).addClass("questr-question");
+            questionEl.attr("data-questr-question-id", question.id);
             $.each(question.answers, function(index, answer) {
                 $("#" + answer.element).click(
                     {
@@ -85,18 +85,18 @@ function render(containerId, config) {
             });
         } else {
             var questionEl = $(document.createElement("div"));
-            questionEl.addClass("recommendi-question")
-            questionEl.attr("data-recommendi-question-id", question.id);
+            questionEl.addClass("questr-question")
+            questionEl.attr("data-questr-question-id", question.id);
             var textEl = $(document.createElement("div"));
-            textEl.addClass("recommendi-question-text");
+            textEl.addClass("questr-question-text");
             textEl.text(question.text);
             textEl.appendTo(questionEl);
             var aContainerEl = $(document.createElement("div"));
-            aContainerEl.addClass("recommendi-answer-container");
+            aContainerEl.addClass("questr-answer-container");
             aContainerEl.appendTo(questionEl);
             $.each(question.answers, function(index, answer) {
                 var buttonEl = $(document.createElement("button"));
-                buttonEl.addClass("recommendi-answer");
+                buttonEl.addClass("questr-answer");
                 buttonEl.text(answer.text);
                 buttonEl.click(
                     {
@@ -112,39 +112,39 @@ function render(containerId, config) {
         }
     });
     if (config.resultelement.hasOwnProperty("element")) {
-        $("#" + config.resultelement.element).addClass("recommendi-result");
+        $("#" + config.resultelement.element).addClass("questr-result");
         $.each(config.results, function(index, result) {
-            $("#" + result.element).addClass("recommendi-recommendation");
-            $("#" + result.element).attr("data-recommendi-recommendation-id", result.id);
+            $("#" + result.element).addClass("questr-recommendation");
+            $("#" + result.element).attr("data-questr-recommendation-id", result.id);
         });
     } else {
         var resultEl = $(document.createElement("div"));
-        resultEl.addClass("recommendi-result");
+        resultEl.addClass("questr-result");
         var rTextEl = $(document.createElement("div"));
-        rTextEl.addClass("recommendi-result-text");
+        rTextEl.addClass("questr-result-text");
         rTextEl.text(config.resultelement.text);
         rTextEl.appendTo(resultEl);
         var rContainerEl = $(document.createElement("div"));
-        rContainerEl.addClass("recommendi-recommendation-container");
+        rContainerEl.addClass("questr-recommendation-container");
         $.each(config.results, function(index, result) {
             var recommendationEl = $(document.createElement("div"));
-            recommendationEl.addClass("recommendi-recommendation");
-            recommendationEl.attr("data-recommendi-recommendation-id", result.id);
+            recommendationEl.addClass("questr-recommendation");
+            recommendationEl.attr("data-questr-recommendation-id", result.id);
             var rImageEl = $(document.createElement("img"));
-            rImageEl.addClass("recommendi-recommendation-image");
+            rImageEl.addClass("questr-recommendation-image");
             rImageEl.attr("src", result.image);
             rImageEl.appendTo(recommendationEl);
             var rTextEl = $(document.createElement("div"));
-            rTextEl.addClass("recommendi-recommendation-text");
+            rTextEl.addClass("questr-recommendation-text");
             rTextEl.text(result.text);
             rTextEl.appendTo(recommendationEl);
             recommendationEl.appendTo(rContainerEl);
         });
         rContainerEl.appendTo(resultEl);
         var restartContainerEl = $(document.createElement("div"));
-        restartContainerEl.addClass("recommendi-restart-button-container");
+        restartContainerEl.addClass("questr-restart-button-container");
         var restartEl = $(document.createElement("button"));
-        restartEl.addClass("recommendi-restart-button");
+        restartEl.addClass("questr-restart-button");
         restartEl.text(config.restartelement.text);
         restartEl.click(
             {
@@ -169,23 +169,26 @@ function handleSelectAnswer(e) {
 }
 
 function selectAnswer(config, answer, containerId) {
-    var containerEl = $("#" + containerId);
-    containerEl.find(".recommendi-question").hide();
     config.responses.push(answer.value);
+    var containerEl = $("#" + containerId);
     if (answer.end) {
-        containerEl.find(".recommendi-recommendation").hide();
+        containerEl.find(".questr-recommendation").hide();
         $.each(config.results, function(index, result) {
             $.each(result.sequences, function(index, sequence) {
                 if (arraysEqual(config.responses, sequence)) {
-                    containerEl.find(".recommendi-recommendation[data-recommendi-recommendation-id=\"" + result.id + "\"]").show();
+                    containerEl.find(".questr-recommendation[data-questr-recommendation-id=\"" + result.id + "\"]").show();
                     return true;
                 }
             });
         });
-        containerEl.find(".recommendi-result").show();
+        containerEl.find(".questr-question.active-question").removeClass("active-question").hide("drop", {direction: "down"}, "slow", function() {
+            containerEl.find(".questr-result").show("drop", {direction: "down"}, "slow");
+        });
     } else {
-        var nextQuestionEl = containerEl.find(".recommendi-question[data-recommendi-question-id=\"" + answer.nextid + "\"]");
-        nextQuestionEl.show();
+        var nextQuestionEl = containerEl.find(".questr-question[data-questr-question-id=\"" + answer.nextid + "\"]");
+        containerEl.find(".questr-question.active-question").removeClass("active-question").hide("drop", {direction: "down"}, "slow", function() {
+            nextQuestionEl.show("drop", {direction: "down"}, "slow").addClass("active-question");
+        });
     }
 }
 
@@ -197,11 +200,20 @@ function handleRestartQuestions(e) {
     );
 }
 
+function initializeQuestions(config, containerId) {
+    var containerEl = $("#" + containerId);
+    containerEl.find(".questr-question").hide();
+    containerEl.find(".questr-result").hide();
+    config.responses = [];
+    containerEl.find(".questr-question[data-questr-question-id=\"" + config.initialid + "\"]").show().addClass("active-question");
+}
+
 function restartQuestions(config, containerId) {
     var containerEl = $("#" + containerId);
-    containerEl.find(".recommendi-question").hide();
-    containerEl.find(".recommendi-result").hide();
-    containerEl.find(".recommendi-question[data-recommendi-question-id=\"" + config.initialid + "\"]").show();
+    containerEl.find(".questr-question").hide();
+    containerEl.find(".questr-result").hide("drop", {direction: "down"}, "slow", function() {
+        containerEl.find(".questr-question[data-questr-question-id=\"" + config.initialid + "\"]").show("drop",{direction: "down"}, "slow").addClass("active-question");
+    });
     config.responses = [];
 }
 
