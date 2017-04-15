@@ -1,4 +1,5 @@
-function questr(containerId, config) {
+function questr(config) {
+    var containerId = config.container;
     backfillDefaults(config);
     render(containerId, config);
     initializeQuestions(config, containerId);
