@@ -54,6 +54,19 @@
                     "value": 2
                 }
             ]
+        },
+        {
+            "element": "quiz-question-4",
+            "answers": [
+                {
+                    "element": "answer-4-1",
+                    "value": 1
+                },
+                {
+                    "element": "answer-4-2",
+                    "value": 2
+                }
+            ]
         }
     ],
     "resultelement": {
@@ -66,13 +79,13 @@
         {
             "element": "result-1",
             "sequences": [
-                [1,1,1],
-                [3,3,3]
+                [1,1,1,1],
+                [3,3,3,1]
             ]
         },
         {
             "element": "result-2",
-            "sequence": [2,2,2]
+            "sequence": [2,2,2,2]
         }
     ],
     "old": {
