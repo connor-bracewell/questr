@@ -69,6 +69,38 @@ function backfillDefaults(config) {
 
 function render(containerId, config) {
     var qContainerEl = $("#" + containerId);
+    if (config.introelement.hasOwnProperty("element")) {
+        $("#" + config.introelement.element).addClass("questr-intro");
+        $("#" + config.startelement.element).click(
+            {
+                config: config,
+                containerId: containerId
+            },
+            handleStartQuestions
+        );
+    } else {
+        var introEl = $(document.createElement("div"));
+        introEl.addClass("questr-intro");
+        var iTextEl = $(document.createElement("div"));
+        iTextEl.addClass("questr-intro-text");
+        iTextEl.text(config.introelement.text);
+        iTextEl.appendTo(introEl);
+        var startContainerEl = $(document.createElement("div"));
+        startContainerEl.addClass("questr-start-button-container");
+        var startEl = $(document.createElement("button"));
+        startEl.addClass("questr-start-button");
+        startEl.text(config.startelement.text);
+        startEl.click(
+            {
+                config: config,
+                containerId: containerId
+            },
+            handleStartQuestions
+        );
+        startEl.appendTo(startContainerEl);
+        startContainerEl.appendTo(introEl);
+        intoEl.appendTo(qContainerEl);
+    }
     $.each(config.questions, function(index, question) {
         if (question.hasOwnProperty("element")) {
             var questionEl = $("#" + question.element);
@@ -212,9 +244,17 @@ function initializeQuestions(config, containerId) {
     var containerEl = $("#" + containerId);
     containerEl.find(".questr-question").hide();
     containerEl.find(".questr-result").hide();
-    config.responses = [];
-    containerEl.find(".questr-question[data-questr-question-id=\"" + config.initialid + "\"]").show().addClass("active-question");
+    containerEl.find(".questr-intro").show();
 }
+
+function startQuestions(config, containerId) {
+    var containerEl = $("#" + containerId);
+    containerEl.find(".questr-intro").hide("drop", {direction: "down"}, "slow", function() {
+        containerEl.find(".questr-question[data-questr-question-id=\"" + config.initialid + "\"]").show("drop",{direction: "down"}, "slow").addClass("active-question");
+    });
+    config.responses = [];
+}
+
 
 function restartQuestions(config, containerId) {
     var containerEl = $("#" + containerId);
