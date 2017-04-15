@@ -15,15 +15,15 @@ function backfillDefaults(config) {
             questionIndex++;
         }
         //set next question if necessary
-        if (!(question.hasOwnProperty("nextid"))) {
+        if (!(question.hasOwnProperty("nextquestion"))) {
             if (index < config.questions.length-1) {
                 //add an id to the next question if necessary
                 if (!(config.questions[index+1].hasOwnProperty("id"))) {
                     config.questions[index+1].id = "questr-question-" + questionIndex;
                     questionIndex++;
                 }
-                //set the nextid to the next question
-                question.nextid = config.questions[index+1].id;   
+                //set the nextquestion to the next question
+                question.nextquestion = config.questions[index+1].id;   
             } else {
                 //if this is the last question, set as end
                 question.end = true;
@@ -41,8 +41,8 @@ function backfillDefaults(config) {
                 answerIndex++;
             }
             //set next question if necessary
-            if (!(answer.hasOwnProperty("nextid"))) {
-                answer.nextid = question.nextid;
+            if (!(answer.hasOwnProperty("nextquestion"))) {
+                answer.nextquestion = question.nextquestion;
             }
             //tag as end if necessary
             if (!(answer.hasOwnProperty("end"))) {
@@ -99,7 +99,7 @@ function render(containerId, config) {
         );
         startEl.appendTo(startContainerEl);
         startContainerEl.appendTo(introEl);
-        intoEl.appendTo(qContainerEl);
+        introEl.appendTo(qContainerEl);
     }
     $.each(config.questions, function(index, question) {
         if (question.hasOwnProperty("element")) {
@@ -211,21 +211,16 @@ function handleSelectAnswer(e) {
 function selectAnswer(config, answer, containerId) {
     config.responses.push(answer.value);
     var containerEl = $("#" + containerId);
-    if (answer.end) {
+    if (answer.results) {
         containerEl.find(".questr-recommendation").hide();
-        $.each(config.results, function(index, result) {
-            $.each(result.sequences, function(index, sequence) {
-                if (arraysEqual(config.responses, sequence)) {
-                    containerEl.find(".questr-recommendation[data-questr-recommendation-id=\"" + result.id + "\"]").show();
-                    return true;
-                }
-            });
+        $.each(answer.results, function(index, result) {
+            containerEl.find(".questr-recommendation[data-questr-recommendation-id=\"" + result + "\"]").show();
         });
         containerEl.find(".questr-question.active-question").removeClass("active-question").hide("drop", {direction: "down"}, "slow", function() {
             containerEl.find(".questr-result").show("drop", {direction: "down"}, "slow");
         });
     } else {
-        var nextQuestionEl = containerEl.find(".questr-question[data-questr-question-id=\"" + answer.nextid + "\"]");
+        var nextQuestionEl = containerEl.find(".questr-question[data-questr-question-id=\"" + answer.nextquestion + "\"]");
         containerEl.find(".questr-question.active-question").removeClass("active-question").hide("drop", {direction: "down"}, "slow", function() {
             nextQuestionEl.show("drop", {direction: "down"}, "slow").addClass("active-question");
         });
@@ -235,6 +230,14 @@ function selectAnswer(config, answer, containerId) {
 function handleRestartQuestions(e) {
     e.preventDefault();
     restartQuestions(
+        e.data.config,
+        e.data.containerId
+    );
+}
+
+function handleStartQuestions(e) {
+    e.preventDefault();
+    startQuestions(
         e.data.config,
         e.data.containerId
     );
