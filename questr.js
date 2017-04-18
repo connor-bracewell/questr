@@ -34,6 +34,18 @@ function backfillDefaults(config) {
         if (!(question.hasOwnProperty("end"))) {
             question.end = false;
         }
+        //add default show/hide animations as required
+        if (!(question.hasOwnProperty("hideanim"))) {
+            question.hideanim = function(el, nextAnim, nextEl) {
+                el.hide();
+                nextAnim(nextEl);
+            };
+        }
+        if (!(question.hasOwnProperty("showanim"))) {
+            question.showanim = function(el) {
+                el.show();
+            };
+        }
         //handle each answer
         $.each(question.answers, function(index, answer) {
             //add an id if necessary
@@ -65,6 +77,24 @@ function backfillDefaults(config) {
     //handle basic config
     if (!(config.hasOwnProperty("initialid"))) {
         config.initialid = config.questions[0].id;
+    }
+    //add default show/hide animations as required
+    if (!(config.introelement.hasOwnProperty("hideanim"))) {
+        config.introelement.hideanim = function(el, nextAnim, nextEl) {
+            el.hide();
+            nextAnim(nextEl);
+        };
+    }
+    if (!(config.resultelement.hasOwnProperty("hideanim"))) {
+        config.resultelement.hideanim = function(el, nextAnim, nextEl) {
+            el.hide();
+            nextAnim(nextEl);
+        };
+    }
+    if (!(config.resultelement.hasOwnProperty("showanim"))) {
+        config.resultelement.showanim = function(el) {
+            el.show();
+        };
     }
 }
 
