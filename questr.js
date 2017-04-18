@@ -217,14 +217,24 @@ function selectAnswer(config, answer, containerId) {
         $.each(answer.results, function(index, result) {
             containerEl.find(".questr-recommendation[data-questr-recommendation-id=\"" + result + "\"]").show();
         });
-        containerEl.find(".questr-question.active-question").removeClass("active-question").hide("drop", {direction: "down"}, "slow", function() {
-            containerEl.find(".questr-result").show("drop", {direction: "down"}, "slow");
-        });
+        var activeQEl = containerEl.find(".questr-question.active-question");
+        var activeQId = activeQEl.attr("data-questr-question-id");
+        var activeQAnim = $.grep(config.questions, function(e){ return e.id == activeQId})[0].hideanim;
+        var resultsEl = containerEl.find(".questr-result");
+        var resultsAnim = config.resultelement.showanim;
+        console.log(resultsAnim);
+        activeQAnim(activeQEl, resultsAnim, resultsEl);
+        activeQEl.removeClass("active-question");
     } else {
-        var nextQuestionEl = containerEl.find(".questr-question[data-questr-question-id=\"" + answer.nextquestion + "\"]");
-        containerEl.find(".questr-question.active-question").removeClass("active-question").hide("drop", {direction: "down"}, "slow", function() {
-            nextQuestionEl.show("drop", {direction: "down"}, "slow").addClass("active-question");
-        });
+        var activeQEl = containerEl.find(".questr-question.active-question")
+        var activeQId = activeQEl.attr("data-questr-question-id");
+        var activeQAnim = $.grep(config.questions, function(e){ return e.id == activeQId})[0].hideanim;
+        var nextQEl = containerEl.find(".questr-question[data-questr-question-id=\"" + answer.nextquestion + "\"]");
+        var nextQId = answer.nextquestion;
+        var nextQAnim = $.grep(config.questions, function(e){ return e.id == nextQId})[0].showanim;
+        activeQAnim(activeQEl, nextQAnim, nextQEl);
+        activeQEl.removeClass("active-question");
+        nextQEl.addClass("active-question");
     }
 }
 
@@ -253,20 +263,27 @@ function initializeQuestions(config, containerId) {
 
 function startQuestions(config, containerId) {
     var containerEl = $("#" + containerId);
-    containerEl.find(".questr-intro").hide("drop", {direction: "down"}, "slow", function() {
-        containerEl.find(".questr-question[data-questr-question-id=\"" + config.initialid + "\"]").show("drop",{direction: "down"}, "slow").addClass("active-question");
-    });
+    var introEl = containerEl.find(".questr-intro");
+    var firstQEl = getQuestionEl(containerEl, config.initialid);
+    var firstQAnim = $.grep(config.questions, function(e){ return e.id == config.initialid})[0].showanim;
+    config.introelement.hideanim(introEl, firstQAnim, firstQEl);
+    firstQEl.addClass("active-question");
     config.responses = [];
 }
-
 
 function restartQuestions(config, containerId) {
     var containerEl = $("#" + containerId);
     containerEl.find(".questr-question").hide();
-    containerEl.find(".questr-result").hide("drop", {direction: "down"}, "slow", function() {
-        containerEl.find(".questr-question[data-questr-question-id=\"" + config.initialid + "\"]").show("drop",{direction: "down"}, "slow").addClass("active-question");
-    });
+    var resultsEl = containerEl.find(".questr-result");
+    var firstQEl = getQuestionEl(containerEl, config.initialid);
+    var firstQAnim = $.grep(config.questions, function(e){ return e.id == config.initialid})[0].showanim;
+    config.resultelement.hideanim(resultsEl, firstQAnim, firstQEl);
+    firstQEl.addClass("active-question");
     config.responses = [];
+}
+
+function getQuestionEl(containerEl, questionId) {
+    return containerEl.find(".questr-question[data-questr-question-id=\"" + questionId + "\"]");
 }
 
 function arraysEqual(a, b) {
